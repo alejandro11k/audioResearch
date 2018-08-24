@@ -1,0 +1,34 @@
+<div> https://googlechromelabs.github.io/web-audio-samples/audio-worklet/basic/hello-audio-worklet.html </div>
+<button id="init" onclick="init()"> init </button>
+<button onclick="onOff()"> start/stop </button>
+
+<script>
+    let on = false
+    let context = new AudioContext();
+    
+    // browser needs!
+    function init(){
+        context.audioWorklet.addModule('./audioworklet1.js').then(() => {
+            let oscillator = new OscillatorNode(context);
+            let gainNode = new GainNode(context);
+            let bypasser = new AudioWorkletNode(context, 'audioworklet1');
+            oscillator.connect(gainNode)
+            gainNode.connect(context.destination);
+            gainNode.gain.value = 0.25;
+            oscillator.start();
+        });
+        on = true
+        // prevent re-addModule
+        document.getElementById("init").hidden = true;
+    }
+
+    function onOff(){
+        if (on) {
+            context.suspend()
+            on = false
+        } else {
+            context.resume()
+            on = true
+        }
+    }   
+</script>

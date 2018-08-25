@@ -1,0 +1,61 @@
+<div> https://googlechromelabs.github.io/web-audio-samples/audio-worklet/basic/noise-audio-param.html </div>
+<button id="init" onclick="init()"> init </button>
+<button onclick="onOff()"> start/stop </button>
+<button id="param" onclick="onOffParam()"> start Param! </button>
+
+<script>
+    let on = false
+    let onParam = false
+    let context = new AudioContext();
+    let modulator = new OscillatorNode(context);
+    let modGain = new GainNode(context);
+    let noiseGenerator;
+    let paramAmp;
+    document.getElementById("param").hidden = true;
+
+    // browser needs!
+    function init(){
+        context.audioWorklet.addModule('./audioworklet2.js').then(() => {
+            
+            noiseGenerator = new AudioWorkletNode(context, 'audioworklet2');
+            noiseGenerator.connect(context.destination);
+
+            paramAmp = noiseGenerator.parameters.get('amplitude');
+            //original example
+            //modulator.connect(modGain).connect(paramAmp);
+
+            modulator.frequency.value = 0.5;
+            modGain.gain.value = 0.75;
+            modulator.start()
+            
+        });
+        on = true
+        // prevent re-addModule
+        document.getElementById("init").hidden = true;
+        document.getElementById("param").hidden = false;
+    }
+
+    function onOff(){
+        if (on) {
+            context.suspend()
+            on = false
+        } else {
+            context.resume()
+            on = true
+        }
+    }   
+
+    function onOffParam(){
+        if (onParam) {
+            //modulator.disconnect(paramAmp)
+            //onParam = false
+        } else {
+            // connect the oscillator to 'amplitude' AudioParam
+            modulator.connect(modGain).connect(paramAmp);
+            onParam = true
+            document.getElementById("param").hidden = true;
+            console.log(modulator)
+        }
+        
+    }
+</script>

@@ -1,4 +1,4 @@
-class audioworklet1 extends AudioWorkletProcessor {
+class Audioworklet1 extends AudioWorkletProcessor {
     constructor() {
         super();
     }
@@ -14,4 +14,4 @@ class audioworklet1 extends AudioWorkletProcessor {
     }
 }
 
-registerProcessor('audioworklet1', audioworklet1);
+registerProcessor('audioworklet1', Audioworklet1);

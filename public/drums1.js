@@ -18,6 +18,7 @@ class PortProcessor extends AudioWorkletProcessor {
             timeStamp: currentTime,
             });
             this._lastUpdate = currentTime;
+            console.log(this)
         }
         /* process audio */
         let input = inputs[0];

@@ -1,7 +1,14 @@
-<button id="init" onclick="init()"> init </button>
-<button id="trigger" onclick="trigger()"> trigger </button>
+<button id="init" onclick="init()"> initAuto </button>
 <button id="onOff" onclick="onOff()"> suspend/resume </button>
-
+<div>
+    <br> --------------------------------------------------------
+    <br> 
+    <br> (reload to start again)
+    <br>
+</div>
+<button id="init" onclick="initOne()"> initOnly1 </button>
+<button id="trigger" onclick="preTrigger()"> trigger </button>
+<button id="onOff" onclick="onOff()"> suspend/resume </button>
 <script>
 
     let on = false
@@ -33,33 +40,44 @@
 
         });
         on = true
-        // prevent re-addModule
-        // document.getElementById("init").hidden = true;
+    }
+
+    function initOne(){
+        context.audioWorklet.addModule('./drums1.js').then(() => {
+            let bypasser2 = new AudioWorkletNode(context, 'port-processor');
+            
+            //let portWorkletNode = new PortWorkletNode(context);
+            
+            oscillator.connect(gainNode)
+            // gainNode.connect(context.destination);
+            gainNode.connect(context.destination);
+
+            //portWorkletNode.connect(context.destination);
+
+            //gainNode.gain.value = 0.25;
+            trigger()
+
+            if (first){
+                oscillator.start();
+                first = false;
+            }
+
+        });
+        on = true
+    }
+
+    function preTrigger(){
+        trigger()
     }
 
     function trigger() {
-        oscillator.frequency.setValueAtTime(150, context.currentTime);
-        gainNode.gain.setValueAtTime(0.8, context.currentTime);
+        const time = context.currentTime;
+        oscillator.frequency.setValueAtTime(150, time);
+        gainNode.gain.setValueAtTime(0.8, time);
 
-        oscillator.frequency.exponentialRampToValueAtTime(0.01, context.currentTime + 0.5);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.5);
+        oscillator.frequency.exponentialRampToValueAtTime(0.1, time + 0.5);
+        gainNode.gain.exponentialRampToValueAtTime(0.1, time + 0.5);
     }
-
-    function trigger2() {
-        // 2nd
-
-        // perfect 60 bpm :) buen sound w/ problem
-        for(let i=0;i<60;i++) {
-            oscillator.frequency.setValueAtTime(150, context.currentTime + i);
-            gainNode.gain.setValueAtTime(0.8, context.currentTime + i);
-
-            oscillator.frequency.exponentialRampToValueAtTime(0.01, context.currentTime + 0.5 + i);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.5 + i);
-        }
-        
-        oscillator.start(context.currentTime);
-        //oscillator.stop(context.currentTime + 0.5 + 20);
-    };
 
     class PortWorkletNode extends AudioWorkletNode {
       constructor(context) {
@@ -83,6 +101,7 @@
             message: '10 messages!',
             timeStamp: this.context.currentTime
           });
+          onOff()
           this.counter = 0;
         }
       }

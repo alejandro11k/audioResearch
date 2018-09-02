@@ -1,0 +1,22 @@
+<div> one-pole </div>
+<button id="init" onclick="init()"> init </button>
+
+
+<script>
+function init() {
+    const context = new AudioContext();
+    Promise.all([
+        context.audioWorklet.addModule('audioworklet2.js'),//('js/noise-generator.js'),
+        context.audioWorklet.addModule('audioworklet4.js')//('js/one-pole.js')
+      ]).then(() => {
+        let noise = new AudioWorkletNode(context, 'audioworklet2');//'noise-generator');
+        let onePole = new AudioWorkletNode(context, 'one-pole');
+        let frequencyParam = onePole.parameters.get('frequency');
+        noise.connect(onePole).connect(context.destination);
+        frequencyParam
+            .setValueAtTime(0.01, 0)
+            .exponentialRampToValueAtTime(context.sampleRate * 0.5, 4.0)
+            .exponentialRampToValueAtTime(0.01, 8.0);
+      });
+  }
+  </script>

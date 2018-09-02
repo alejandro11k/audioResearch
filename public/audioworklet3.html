@@ -1,0 +1,40 @@
+<div> https://googlechromelabs.github.io/web-audio-samples/audio-worklet/basic/bit-crusher.html </div>
+<button id="init" onclick="init()"> init </button>
+<!--button onclick="onOff()"> start/stop </button-->
+<!--button id="param" onclick="onOffParam()"> start Param! </button-->
+
+<script>
+function init() {
+    const context = new AudioContext();
+    context.audioWorklet.addModule('audioworklet3.js').then(() => {
+      let oscillator = new OscillatorNode(context);
+      let bitCrusher = new AudioWorkletNode(context, 'audioworklet3');
+      oscillator.type = 'sawtooth';
+      oscillator.frequency.value = 5000;
+      oscillator.connect(bitCrusher).connect(context.destination);
+      
+      let paramBitDepth = bitCrusher.parameters.get('bitDepth');
+      let paramReduction = bitCrusher.parameters.get('frequencyReduction');
+      
+      paramBitDepth.setValueAtTime(1, 0);
+      // The target reduction values are determined experimentally.
+      paramReduction.setValueAtTime(0.01, 0);
+      paramReduction.linearRampToValueAtTime(0.1, 4);
+      paramReduction.exponentialRampToValueAtTime(0.01, 8);
+      
+      // Play the tone for 8 seconds.
+      oscillator.start();
+      oscillator.stop(4); // can t call start more than once
+
+      console.log(context.currentTime)
+      console.log(context.state)
+
+      /**
+       * suspended: The audio context has been suspended (with the AudioContext.suspend() method. <Promise>)
+        running: The audio context is running normally.
+        closed: The audio context has been closed (with the AudioContext.close() method. <Promise>)
+       */
+       
+    });
+}
+</script>

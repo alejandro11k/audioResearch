@@ -40,7 +40,7 @@
             context.suspend()
             on = false
         } else {
-            context.resume()
+            context.resume() // AudioContext.resume is deprecated -> BaseAudioContext.resume()
             on = true
         }
     }   

@@ -31,15 +31,29 @@
     }
 
     function trigger(context, oscillator, gainNode) {
+        /*
         oscillator.frequency.setValueAtTime(150, context.currentTime);
         gainNode.gain.setValueAtTime(1, context.currentTime);
 
         oscillator.frequency.exponentialRampToValueAtTime(0.01, context.currentTime + 0.5);
         gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.5);
+        */
 
+        // 2nd
+
+        // perfect 120 bpm!!! :)
+        for(let i=0;i<60;i++) {
+            console.log(context.currentTime)
+            oscillator.frequency.setValueAtTime(150, context.currentTime + i);
+            gainNode.gain.setValueAtTime(1, context.currentTime + i);
+
+            oscillator.frequency.exponentialRampToValueAtTime(0.01, context.currentTime + 0.5 + i);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.5 + i);
+        }
+        
         oscillator.start(context.currentTime);
 
-        oscillator.stop(context.currentTime + 0.5);
+        oscillator.stop(context.currentTime + 0.5 + 20);
     };
 
     function onOff(){

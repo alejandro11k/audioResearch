@@ -26,6 +26,8 @@
             //init2();
             start = true;
         }
+        timer.stop();
+        start = false
     });
 
     function stopStart(){
@@ -53,11 +55,11 @@
             
             let portWorkletNode = new PortWorkletNode(context);
             
-                        oscillator.connect(gainNode)
-                        // gainNode.connect(context.destination);
-                        gainNode.connect(portWorkletNode);
-            
-                        portWorkletNode.connect(context.destination);
+            oscillator.connect(gainNode)
+            // gainNode.connect(context.destination);
+            gainNode.connect(portWorkletNode);
+
+            portWorkletNode.connect(context.destination);
 
             //gainNode.gain.value = 0.25;
             trigger2(context, oscillator, gainNode)

@@ -1,0 +1,101 @@
+<button id="init" onclick="init()"> init </button>
+<button id="trigger" onclick="trigger()"> trigger </button>
+<button id="onOff" onclick="onOff()"> suspend/resume </button>
+
+<script>
+
+    let on = false
+    let context = new AudioContext();
+    let oscillator = new OscillatorNode(context);
+    let gainNode = new GainNode(context);
+    let first = true
+    
+    // browser needs!
+    function init(){
+        context.audioWorklet.addModule('./drums1.js').then(() => {
+            let bypasser = new AudioWorkletNode(context, 'port-processor');
+            
+            let portWorkletNode = new PortWorkletNode(context);
+            
+            oscillator.connect(gainNode)
+            // gainNode.connect(context.destination);
+            gainNode.connect(portWorkletNode);
+
+            portWorkletNode.connect(context.destination);
+
+            //gainNode.gain.value = 0.25;
+            trigger()
+
+            if (first){
+                oscillator.start();
+                first = false;
+            }
+
+        });
+        on = true
+        // prevent re-addModule
+        // document.getElementById("init").hidden = true;
+    }
+
+    function trigger() {
+        oscillator.frequency.setValueAtTime(150, context.currentTime);
+        gainNode.gain.setValueAtTime(0.8, context.currentTime);
+
+        oscillator.frequency.exponentialRampToValueAtTime(0.01, context.currentTime + 0.5);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.5);
+    }
+
+    function trigger2() {
+        // 2nd
+
+        // perfect 60 bpm :) buen sound w/ problem
+        for(let i=0;i<60;i++) {
+            oscillator.frequency.setValueAtTime(150, context.currentTime + i);
+            gainNode.gain.setValueAtTime(0.8, context.currentTime + i);
+
+            oscillator.frequency.exponentialRampToValueAtTime(0.01, context.currentTime + 0.5 + i);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.5 + i);
+        }
+        
+        oscillator.start(context.currentTime);
+        //oscillator.stop(context.currentTime + 0.5 + 20);
+    };
+
+    class PortWorkletNode extends AudioWorkletNode {
+      constructor(context) {
+        super(context, 'port-processor');
+        this.counter = 0;
+        this.port.onmessage = this.handleMessage.bind(this);
+        this.port.postMessage({
+          message: 'Are you ready?',
+          timeStamp: this.context.currentTime
+        });
+      }
+      handleMessage(event) {
+        this.counter++;
+        console.log('[Node:Received] "' + event.data.message +
+                    '" (' + event.data.timeStamp + ')');
+        trigger()
+        // Notify the processor when the node gets 10 messages. Then reset the
+        // counter.
+        if (this.counter > 10) {
+          this.port.postMessage({
+            message: '10 messages!',
+            timeStamp: this.context.currentTime
+          });
+          this.counter = 0;
+        }
+      }
+    }
+
+    function onOff(){
+        if (on) {
+            context.suspend()
+            on = false
+        } else {
+            context.resume()
+            on = true
+        }
+    } 
+
+</script>

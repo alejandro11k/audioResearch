@@ -5,7 +5,8 @@
     <br> https://github.com/chrislo/drum_synthesis
     <br> init button to punch!! but using audioWorklet
 </div>
-<button id="init" onclick="init()"> init </button>
+<button id="init on punch at push" onclick="init()"> init </button>
+<button id="init 60 punch at push" onclick="init2()"> init </button>
 <!--button onclick="onOff()"> start/stop </button-->
 
 <script>
@@ -13,6 +14,23 @@
     let context = new AudioContext();
     
     // browser needs!
+    function init2(){
+        context.audioWorklet.addModule('./audioworklet1.js').then(() => {
+            let oscillator = new OscillatorNode(context);
+            let gainNode = new GainNode(context);
+            let bypasser = new AudioWorkletNode(context, 'audioworklet1');
+            oscillator.connect(gainNode)
+            gainNode.connect(context.destination);
+            //gainNode.gain.value = 0.25;
+            trigger2(context, oscillator, gainNode)
+            //oscillator.start();
+
+        });
+        on = true
+        // prevent re-addModule
+        // document.getElementById("init").hidden = true;
+    }
+    
     function init(){
         context.audioWorklet.addModule('./audioworklet1.js').then(() => {
             let oscillator = new OscillatorNode(context);
@@ -30,26 +48,30 @@
         // document.getElementById("init").hidden = true;
     }
 
-    function trigger(context, oscillator, gainNode) {
-        /*
-        oscillator.frequency.setValueAtTime(150, context.currentTime);
-        gainNode.gain.setValueAtTime(1, context.currentTime);
-
-        oscillator.frequency.exponentialRampToValueAtTime(0.01, context.currentTime + 0.5);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.5);
-        */
-
+    function trigger2(context, oscillator, gainNode) {
         // 2nd
 
-        // perfect 120 bpm!!! :)
+        // perfect 120 bpm!!!??? /2 :) buen sound w/ problem
         for(let i=0;i<60;i++) {
             console.log(context.currentTime)
             oscillator.frequency.setValueAtTime(150, context.currentTime + i);
-            gainNode.gain.setValueAtTime(1, context.currentTime + i);
+            gainNode.gain.setValueAtTime(0.8, context.currentTime + i);
 
             oscillator.frequency.exponentialRampToValueAtTime(0.01, context.currentTime + 0.5 + i);
             gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.5 + i);
         }
+        
+        oscillator.start(context.currentTime);
+
+        oscillator.stop(context.currentTime + 0.5 + 20);
+    };
+
+    function trigger(context, oscillator, gainNode) {
+        oscillator.frequency.setValueAtTime(150, context.currentTime);
+        gainNode.gain.setValueAtTime(0.9, context.currentTime);
+
+        oscillator.frequency.exponentialRampToValueAtTime(0.01, context.currentTime + 0.5);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.5);
         
         oscillator.start(context.currentTime);
 

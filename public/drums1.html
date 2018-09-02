@@ -8,7 +8,7 @@
 <button id="init on punch at push" onclick="init()"> init </button>
 <button id="init 60 punch at push" onclick="init2()"> init </button>
 <div id="basicUsage">00:00:00</div>
-<!--button onclick="onOff()"> start/stop </button-->
+<button onclick="onOff()"> start/stop </button>
 <button onclick="stopStart()"> stop/start timer (view on console)</button-->
 
 <script src="./easytimer.min.js"></script>
@@ -50,11 +50,14 @@
             let oscillator = new OscillatorNode(context);
             let gainNode = new GainNode(context);
             let bypasser = new AudioWorkletNode(context, 'port-processor');
-            oscillator.connect(gainNode)
-            gainNode.connect(context.destination);
-
+            
             let portWorkletNode = new PortWorkletNode(context);
-            portWorkletNode.connect(oscillator);
+            
+                        oscillator.connect(gainNode)
+                        // gainNode.connect(context.destination);
+                        gainNode.connect(portWorkletNode);
+            
+                        portWorkletNode.connect(context.destination);
 
             //gainNode.gain.value = 0.25;
             trigger2(context, oscillator, gainNode)

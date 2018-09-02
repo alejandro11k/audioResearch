@@ -9,6 +9,19 @@
 <button id="init" onclick="initOne()"> initOnly1 </button>
 <button id="trigger" onclick="preTrigger()"> trigger </button>
 <button id="onOff" onclick="onOff()"> suspend/resume </button>
+<div>
+    <br> --------------------------------------------------------
+    <br> 
+    <br> easytimer again
+    <br>
+</div>
+<button id="init" onclick="startStop()"> start/stop </button>
+<br>
+<button id="init" onclick=window.location.reload()> reload </button>
+<br>
+<button id="init" onclick="startSync()"> startSync </button>
+
+<script src="./easytimer.min.js"></script>
 <script>
 
     let on = false
@@ -89,6 +102,7 @@
           timeStamp: this.context.currentTime
         });
       }
+
       handleMessage(event) {
         this.counter++;
         console.log('[Node:Received] "' + event.data.message +
@@ -116,5 +130,68 @@
             on = true
         }
     } 
+
+    let timer = new Timer();
+    //timer.start();
+    let start = false;
+    let fst = true;
+    //init(); noup!
+    timer.addEventListener('secondsUpdated', function (e) {
+        //document.getElementById("basicUsage").html(timer.getTimeValues().toString());
+        console.log(timer.getTimeValues().toString())
+        //init();
+        if (fst) {
+            console.log('fst')
+            initEastTimer();
+            start = true;
+            fst = false;
+            oscillator.start();
+        } else {
+            trigger()
+        }
+        //timer.stop();
+        //start = false
+    });
+
+    function startStop(){
+        if (start) {
+            timer.stop();
+            start = false
+        } else {
+            timer.start();
+            start = true
+        }
+        
+    }
+
+    function initEastTimer(){
+        context.audioWorklet.addModule('./drums1.js').then(() => {
+            let bypasser3 = new AudioWorkletNode(context, 'port-processor');
+            
+            //let portWorkletNode = new PortWorkletNode(context);
+            
+            oscillator.connect(gainNode)
+            // gainNode.connect(context.destination);
+            gainNode.connect(context.destination);
+
+            //portWorkletNode.connect(context.destination);
+
+            //gainNode.gain.value = 0.25;
+            trigger()
+            /*
+            if (first){
+                oscillator.start();
+                first = false;
+            }
+            */
+
+        });
+        on = true
+    }
+
+    function startSync(){
+        startStop()
+        init()
+    }
 
 </script>

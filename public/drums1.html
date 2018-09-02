@@ -21,12 +21,12 @@
     timer.addEventListener('secondsUpdated', function (e) {
         //document.getElementById("basicUsage").html(timer.getTimeValues().toString());
         console.log(timer.getTimeValues().toString())
-        //init();
+        init();
         if (!start) {
             //init2();
             start = true;
         }
-        timer.stop();
+        //timer.stop();
         start = false
     });
 

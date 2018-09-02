@@ -7,7 +7,38 @@
 </div>
 <button id="init on punch at push" onclick="init()"> init </button>
 <button id="init 60 punch at push" onclick="init2()"> init </button>
+<div id="basicUsage">00:00:00</div>
 <!--button onclick="onOff()"> start/stop </button-->
+<button onclick="stopStart()"> stop/start timer (view on console)</button-->
+
+<script src="./easytimer.min.js"></script>
+<script>
+    //var timerInstance = new Timer();
+    var timer = new Timer();
+    timer.start();
+    let start = false;
+    //init(); noup!
+    timer.addEventListener('secondsUpdated', function (e) {
+        //document.getElementById("basicUsage").html(timer.getTimeValues().toString());
+        console.log(timer.getTimeValues().toString())
+        init();
+        if (!start) {
+            //init2();
+            start = true;
+        }
+    });
+
+    function stopStart(){
+        if (start) {
+            timer.stop();
+            start = false
+        } else {
+            timer.start();
+            start = true
+        }
+        
+    }
+</script>
 
 <script>
     let on = false
@@ -87,34 +118,5 @@
             on = true
         }
     }   
-
-    class Kick {
-        constructor(context) {
-            this.context = context;
-        };
-
-        /*
-        setup = function() {
-            this.osc = this.context.createOscillator();
-            this.gain = this.context.createGain();
-            this.osc.connect(this.gain);
-            this.gain.connect(this.context.destination)
-        };
-
-        trigger = function(time) {
-            this.setup();
-
-            this.osc.frequency.setValueAtTime(150, time);
-            this.gain.gain.setValueAtTime(1, time);
-
-            this.osc.frequency.exponentialRampToValueAtTime(0.01, time + 0.5);
-            this.gain.gain.exponentialRampToValueAtTime(0.01, time + 0.5);
-
-            this.osc.start(time);
-
-            this.osc.stop(time + 0.5);
-        };
-        */
-    }
 
 </script>

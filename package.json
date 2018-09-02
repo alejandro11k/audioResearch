@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "easytimer": "^1.1.1",
     "express": "^4.16.3"
   }
 }

@@ -80,7 +80,8 @@
     }
 
     function preTrigger(){
-        trigger()
+        //trigger()
+        initOne()
     }
 
     function trigger() {
@@ -146,7 +147,17 @@
             start = true;
             fst = false;
             oscillator.start();
+            //startStop()
+            console.log(context)
+            context.close();
+            console.log(context)
         } else {
+            
+            gainNode.disconnect(context.destination)
+            oscillator.disconnect(gainNode)
+
+            oscillator.connect(gainNode)
+            gainNode.connect(context.destination)
             trigger()
         }
         //timer.stop();

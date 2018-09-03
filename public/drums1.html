@@ -77,13 +77,14 @@
             let gainNode = new GainNode(context);
             let bypasser = new AudioWorkletNode(context, 'port-processor');
 
-            let portWorkletNode = new PortWorkletNode(context);
+            //let portWorkletNode = new PortWorkletNode(context);
 
             oscillator.connect(gainNode)
             // gainNode.connect(context.destination);
-            gainNode.connect(portWorkletNode);
+            //gainNode.connect(portWorkletNode);
+            gainNode.connect(context.destination);
 
-            portWorkletNode.connect(context.destination);
+            //portWorkletNode.connect(context.destination);
 
             //gainNode.gain.value = 0.25;
             trigger(context, oscillator, gainNode)

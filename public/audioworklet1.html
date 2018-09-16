@@ -8,7 +8,7 @@
     
     // browser needs!
     function init(){
-        context.audioWorklet.addModule('./audioworklet1.js').then(() => {
+        context.audioWorklet.addModule('static/audioworklet1.js').then(() => {
             let oscillator = new OscillatorNode(context);
             let gainNode = new GainNode(context);
             let bypasser = new AudioWorkletNode(context, 'audioworklet1');

@@ -1,0 +1,21 @@
+<!--button id="start" onclick="start()"> start </button-->
+<button id="start"> start </button>
+        
+<!--script src="./processor.js"></script-->
+<!--script src="./port-worklet-node.js"></script-->
+
+<script type="module">
+    import { start } from './core.js'
+    //window.start = start
+    document.querySelector('#start').addEventListener('click', start)
+</script>
+
+<!--script>
+    function runDemo() {
+        console.log('nothing')
+    }
+</script-->
+
+<script>
+    console.log(window)
+</script>

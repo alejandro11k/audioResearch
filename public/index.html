@@ -1,13 +1,14 @@
 <!--button id="start" onclick="start()"> start </button-->
 <button id="init"> init </button>
-
+<button id="stop"> stop </button>
 <!--script src="./processor.js"></script-->
 <!--script src="./port-worklet-node.js"></script-->
 
 <script type="module">
-    import { init } from './audio-core.js'
+    import { init, stop } from './audio-core.js'
     //window.start = start
     document.querySelector('#init').addEventListener('click', init)
+    document.querySelector('#stop').addEventListener('click', stop)
 </script>
 
 <!--script>

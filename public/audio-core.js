@@ -12,14 +12,3 @@ export function init() {
 
     });
 }
-
-function trigger() {
-    const time = context.currentTime;
-    oscillator.frequency.setValueAtTime(150, time);
-    gainNode.gain.setValueAtTime(0.8, time);
-
-    oscillator.frequency.exponentialRampToValueAtTime(0.1, time + 0.5);
-    gainNode.gain.exponentialRampToValueAtTime(0.1, time + 0.5);
-}
-
-

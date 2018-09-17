@@ -7,7 +7,7 @@
 
 <br>
 <br>
-<input id="myRange" type ="range" min ="0.2" max="2.0" step ="0.1"/>
+<input id="myRange" type ="range" value = "1" min ="0.2" max="1.5" step ="0.1"/>
 <div id="demo"/>
 
 <script type="module">
@@ -30,12 +30,16 @@ console.log('nothing')
     
     var slider = document.getElementById("myRange");
     var output = document.getElementById("demo");
-    output.innerHTML = slider.value; // Display the default slider value
+    output.innerHTML = sec2Bpm(slider.value) ; // Display the default slider value
 
     // Update the current slider value (each time you drag the slider handle)
     slider.oninput = function() {
-        output.innerHTML = this.value;
+        output.innerHTML = sec2Bpm(this.value);
         periodicity(this.value)
     }
-    console.log(slider.value)
+    console.log(slider.value);
+
+    function sec2Bpm(sec) {
+        return 60000 / (sec * 1000)
+    }
 </script>

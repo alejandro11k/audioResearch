@@ -1,12 +1,19 @@
 <!--button id="start" onclick="start()"> start </button-->
+<br>
 <button id="init"> init </button>
 <button id="stop"> stop </button>
 <!--script src="./processor.js"></script-->
 <!--script src="./port-worklet-node.js"></script-->
 
+<br>
+<br>
+<input id="myRange" type ="range" min ="0.2" max="2.0" step ="0.1"/>
+<div id="demo"/>
+
 <script type="module">
-    import { init, stop } from './audio-core.js'
+    import { init, stop, setPeriodicity } from './audio-core.js'
     //window.start = start
+    window.periodicity = setPeriodicity
     document.querySelector('#init').addEventListener('click', init)
     document.querySelector('#stop').addEventListener('click', stop)
 </script>
@@ -19,5 +26,16 @@ console.log('nothing')
 
 <script>
     console.log(window)
+    console.log(document.querySelector('#slider3'))
+    
+    var slider = document.getElementById("myRange");
+    var output = document.getElementById("demo");
+    output.innerHTML = slider.value; // Display the default slider value
 
+    // Update the current slider value (each time you drag the slider handle)
+    slider.oninput = function() {
+        output.innerHTML = this.value;
+        periodicity(this.value)
+    }
+    console.log(slider.value)
 </script>

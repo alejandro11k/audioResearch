@@ -12,13 +12,13 @@ class PortProcessor extends AudioWorkletProcessor {
 
     process(inputs, outputs){
         // Post a message to the node for every 1 second.
-        if (currentTime - this._lastUpdate > 5.0) {
+        if (currentTime - this._lastUpdate > 0.5) {
             this.port.postMessage({
             message: 'Process is called.',
             timeStamp: currentTime,
             });
             this._lastUpdate = currentTime;
-            console.log(this)
+            //console.log(this)
         }
         /* process audio */
         let input = inputs[0];

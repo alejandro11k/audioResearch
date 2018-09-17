@@ -1,21 +1,22 @@
 <!--button id="start" onclick="start()"> start </button-->
-<button id="start"> start </button>
-        
+<button id="init"> init </button>
+
 <!--script src="./processor.js"></script-->
 <!--script src="./port-worklet-node.js"></script-->
 
 <script type="module">
-    import { start } from './core.js'
+    import { init } from './audio-core.js'
     //window.start = start
-    document.querySelector('#start').addEventListener('click', start)
+    document.querySelector('#init').addEventListener('click', init)
 </script>
 
 <!--script>
-    function runDemo() {
-        console.log('nothing')
-    }
+function runDemo() {
+console.log('nothing')
+}
 </script-->
 
 <script>
     console.log(window)
+
 </script>

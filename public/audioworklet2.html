@@ -22,7 +22,7 @@
 
             paramAmp = noiseGenerator.parameters.get('amplitude');
             //original example
-            //modulator.connect(modGain).connect(paramAmp);
+            modulator.connect(modGain).connect(paramAmp);
 
             modulator.frequency.value = 0.5;
             modGain.gain.value = 0.75;
